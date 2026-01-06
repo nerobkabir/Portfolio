@@ -6,7 +6,7 @@ import emailjs from '@emailjs/browser';
 
 const Portfolio = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedProject, setSelectedProject] = useState<any>(null);
   const [displayedText, setDisplayedText] = useState('');
   const [currentRole, setCurrentRole] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -15,50 +15,40 @@ const Portfolio = () => {
 
 
 
-  // State for form
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
-  });
+ const [formData, setFormData] = useState({
+  name: '',
+  email: '',
+  subject: '',
+  message: ''
+});
 
-  const [formStatus, setFormStatus] = useState(''); // 'sending', 'success', 'error'
+const [formStatus, setFormStatus] = useState('');
 
-  // EmailJS Configuration
-  const EMAILJS_SERVICE_ID = 'service_jjwxlze'; // Get from EmailJS dashboard
-  const EMAILJS_TEMPLATE_ID = 'template_3ke32uy'; // Get from EmailJS dashboard
-  const EMAILJS_PUBLIC_KEY = '7MC_iQg1tSY_zEnZb'; // Get from EmailJS dashboard
+const EMAILJS_SERVICE_ID = 'service_jjwxlze';
+const EMAILJS_TEMPLATE_ID = 'template_3ke32uy';
+const EMAILJS_PUBLIC_KEY = '7MC_iQg1tSY_zEnZb';
 
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    setFormStatus('sending');
+const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  setFormStatus('sending');
 
-    try {
-      await emailjs.sendForm(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        e.target,
-        EMAILJS_PUBLIC_KEY
-      );
+  try {
+    await emailjs.sendForm(
+      EMAILJS_SERVICE_ID,
+      EMAILJS_TEMPLATE_ID,
+      e.target as HTMLFormElement,
+      EMAILJS_PUBLIC_KEY
+    );
 
-      setFormStatus('success');
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: ''
-      });
+    setFormStatus('success');
+    setFormData({ name: '', email: '', subject: '', message: '' });
 
-      // Reset form after 5 seconds
-      setTimeout(() => {
-        setFormStatus('');
-      }, 5000);
-    } catch (error) {
-      console.error('Email send failed:', error);
-      setFormStatus('error');
-    }
-  };
+    setTimeout(() => setFormStatus(''), 5000);
+  } catch (error) {
+    console.error('Email send failed:', error);
+    setFormStatus('error');
+  }
+};
 
   const roles = [
     'Full-Stack Developer',
@@ -82,13 +72,13 @@ const Portfolio = () => {
   };
 
   // Mouse tracking for interactive background
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+useEffect(() => {
+  const handleMouseMove = (e: MouseEvent) => {
+    setMousePosition({ x: e.clientX, y: e.clientY });
+  };
+  window.addEventListener('mousemove', handleMouseMove);
+  return () => window.removeEventListener('mousemove', handleMouseMove);
+}, []);
 
   // Scroll tracking for parallax effect
   useEffect(() => {
@@ -228,11 +218,11 @@ const Portfolio = () => {
     { icon: '📖', text: 'Deepening DSA & Design Patterns knowledge' }
   ];
 
-  const scrollToSection = (href) => {
-    setIsMenuOpen(false);
-    const element = document.querySelector(href);
-    element?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const scrollToSection = (href: string) => {
+  setIsMenuOpen(false);
+  const element = document.querySelector(href);
+  element?.scrollIntoView({ behavior: 'smooth' });
+};
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden relative">
@@ -558,13 +548,14 @@ const Portfolio = () => {
                       alt="Kabir Hossain"
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                       onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.style.display = 'none';
-                        const fallback = document.createElement('div');
-                        fallback.className = 'w-full h-full flex items-center justify-center text-7xl md:text-8xl';
-                        fallback.textContent = '👨‍💻';
-                        e.target.parentNode.appendChild(fallback);
-                      }}
+  const target = e.target as HTMLImageElement;
+  target.onerror = null;
+  target.style.display = 'none';
+  const fallback = document.createElement('div');
+  fallback.className = 'w-full h-full flex items-center justify-center text-7xl md:text-8xl';
+  fallback.textContent = '👨‍💻';
+  target.parentNode?.appendChild(fallback);
+}}
                     />
                   </div>
                   <div className="absolute -inset-2 rounded-full border-2 border-blue-500/30 animate-pulse opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -1571,12 +1562,12 @@ const Portfolio = () => {
                       <h4 className="text-xl font-bold text-white">Key Features</h4>
                     </div>
                     <div className="space-y-3">
-                      {selectedProject.features.map((feature, index) => (
-                        <div key={index} className="flex items-start gap-3">
-                          <div className="w-2 h-2 rounded-full bg-green-500 mt-2 flex-shrink-0"></div>
-                          <span className="text-gray-300 text-sm">{feature}</span>
-                        </div>
-                      ))}
+                      {selectedProject.features.map((feature: string, index: number) => (
+  <div key={index} className="flex items-start gap-3">
+    <div className="w-2 h-2 rounded-full bg-green-500 mt-2 flex-shrink-0"></div>
+    <span className="text-gray-300 text-sm">{feature}</span>
+  </div>
+))}
                     </div>
                   </div>
 
@@ -1589,14 +1580,14 @@ const Portfolio = () => {
                       <h4 className="text-xl font-bold text-white">Technologies Used</h4>
                     </div>
                     <div className="flex flex-wrap gap-3">
-                      {selectedProject.tech.map((tech, index) => (
-                        <span
-                          key={index}
-                          className="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300 border border-white/10 hover:border-blue-500/50 transition-colors duration-300"
-                        >
-                          {tech}
-                        </span>
-                      ))}
+                      {selectedProject.tech.map((tech: string, index: number) => (
+  <span
+    key={index}
+    className="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300 border border-white/10 hover:border-blue-500/50 transition-colors duration-300"
+  >
+    {tech}
+  </span>
+))}
                     </div>
                   </div>
 
