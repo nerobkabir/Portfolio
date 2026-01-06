@@ -15,40 +15,40 @@ const Portfolio = () => {
 
 
 
- const [formData, setFormData] = useState({
-  name: '',
-  email: '',
-  subject: '',
-  message: ''
-});
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  });
 
-const [formStatus, setFormStatus] = useState('');
+  const [formStatus, setFormStatus] = useState('');
 
-const EMAILJS_SERVICE_ID = 'service_jjwxlze';
-const EMAILJS_TEMPLATE_ID = 'template_3ke32uy';
-const EMAILJS_PUBLIC_KEY = '7MC_iQg1tSY_zEnZb';
+  const EMAILJS_SERVICE_ID = 'service_jjwxlze';
+  const EMAILJS_TEMPLATE_ID = 'template_3ke32uy';
+  const EMAILJS_PUBLIC_KEY = '7MC_iQg1tSY_zEnZb';
 
-const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  setFormStatus('sending');
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setFormStatus('sending');
 
-  try {
-    await emailjs.sendForm(
-      EMAILJS_SERVICE_ID,
-      EMAILJS_TEMPLATE_ID,
-      e.target as HTMLFormElement,
-      EMAILJS_PUBLIC_KEY
-    );
+    try {
+      await emailjs.sendForm(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        e.target as HTMLFormElement,
+        EMAILJS_PUBLIC_KEY
+      );
 
-    setFormStatus('success');
-    setFormData({ name: '', email: '', subject: '', message: '' });
+      setFormStatus('success');
+      setFormData({ name: '', email: '', subject: '', message: '' });
 
-    setTimeout(() => setFormStatus(''), 5000);
-  } catch (error) {
-    console.error('Email send failed:', error);
-    setFormStatus('error');
-  }
-};
+      setTimeout(() => setFormStatus(''), 5000);
+    } catch (error) {
+      console.error('Email send failed:', error);
+      setFormStatus('error');
+    }
+  };
 
   const roles = [
     'Full-Stack Developer',
@@ -72,13 +72,13 @@ const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   };
 
   // Mouse tracking for interactive background
-useEffect(() => {
-  const handleMouseMove = (e: MouseEvent) => {
-    setMousePosition({ x: e.clientX, y: e.clientY });
-  };
-  window.addEventListener('mousemove', handleMouseMove);
-  return () => window.removeEventListener('mousemove', handleMouseMove);
-}, []);
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   // Scroll tracking for parallax effect
   useEffect(() => {
@@ -219,10 +219,10 @@ useEffect(() => {
   ];
 
   const scrollToSection = (href: string) => {
-  setIsMenuOpen(false);
-  const element = document.querySelector(href);
-  element?.scrollIntoView({ behavior: 'smooth' });
-};
+    setIsMenuOpen(false);
+    const element = document.querySelector(href);
+    element?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden relative">
@@ -268,12 +268,12 @@ useEffect(() => {
           <div className="relative group">
             {/* Animated Glow Background */}
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-2xl opacity-20 group-hover:opacity-40 blur-xl transition-all duration-500 animate-pulse"></div>
-            
+
             {/* Main Navbar Container */}
             <div className="relative bg-black/40 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl overflow-hidden">
               {/* Subtle Grid Pattern Overlay */}
               <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px] opacity-30"></div>
-              
+
               {/* Gradient Shine Effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
 
@@ -281,7 +281,7 @@ useEffect(() => {
                 {/* Logo Section - Minimalist & Bold */}
                 <div className="relative group/logo cursor-pointer">
                   <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-xl opacity-0 group-hover/logo:opacity-30 blur-lg transition-all duration-500"></div>
-                  
+
                   <div className="relative flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-xl border border-white/10 group-hover/logo:border-white/30 transition-all duration-300">
                     {/* Animated Icon */}
                     <div className="relative">
@@ -290,7 +290,7 @@ useEffect(() => {
                       </div>
                       <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 opacity-0 group-hover/logo:opacity-50 blur-md transition-opacity duration-300"></div>
                     </div>
-                    
+
                     {/* Brand Text */}
                     <div className="hidden sm:block">
                       <div className="text-xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent tracking-tight">
@@ -311,10 +311,10 @@ useEffect(() => {
                     >
                       {/* Hover Background */}
                       <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 to-purple-500/0 group-hover/nav:from-blue-500/10 group-hover/nav:to-purple-500/10 rounded-lg transition-all duration-300"></div>
-                      
+
                       {/* Active Indicator Line */}
                       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 group-hover/nav:w-3/4 transition-all duration-300 rounded-full"></div>
-                      
+
                       {/* Text */}
                       <span className="relative text-sm font-medium text-gray-300 group-hover/nav:text-white transition-colors duration-300 flex items-center gap-2">
                         <span className="w-1 h-1 rounded-full bg-blue-400 opacity-0 group-hover/nav:opacity-100 transition-opacity duration-300"></span>
@@ -358,7 +358,7 @@ useEffect(() => {
               <div className="relative bg-black/40 backdrop-blur-xl border border-white/20 rounded-2xl p-4 shadow-2xl overflow-hidden">
                 {/* Background Pattern */}
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px] opacity-30"></div>
-                
+
                 <div className="relative space-y-2">
                   {navItems.map((item, index) => (
                     <button
@@ -548,14 +548,14 @@ useEffect(() => {
                       alt="Kabir Hossain"
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                       onError={(e) => {
-  const target = e.target as HTMLImageElement;
-  target.onerror = null;
-  target.style.display = 'none';
-  const fallback = document.createElement('div');
-  fallback.className = 'w-full h-full flex items-center justify-center text-7xl md:text-8xl';
-  fallback.textContent = '👨‍💻';
-  target.parentNode?.appendChild(fallback);
-}}
+                        const target = e.target as HTMLImageElement;
+                        target.onerror = null;
+                        target.style.display = 'none';
+                        const fallback = document.createElement('div');
+                        fallback.className = 'w-full h-full flex items-center justify-center text-7xl md:text-8xl';
+                        fallback.textContent = '👨‍💻';
+                        target.parentNode?.appendChild(fallback);
+                      }}
                     />
                   </div>
                   <div className="absolute -inset-2 rounded-full border-2 border-blue-500/30 animate-pulse opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -1088,16 +1088,16 @@ useEffect(() => {
               >
                 <div className="flex items-center gap-4 mb-4">
                   <div className={`text-3xl ${stat.color === 'yellow' ? 'text-yellow-400' :
-                      stat.color === 'green' ? 'text-green-400' :
-                        stat.color === 'purple' ? 'text-purple-400' :
-                          'text-blue-400'
+                    stat.color === 'green' ? 'text-green-400' :
+                      stat.color === 'purple' ? 'text-purple-400' :
+                        'text-blue-400'
                     }`}>
                     {stat.icon}
                   </div>
                   <div className={`text-3xl font-bold ${stat.color === 'yellow' ? 'text-yellow-400' :
-                      stat.color === 'green' ? 'text-green-400' :
-                        stat.color === 'purple' ? 'text-purple-400' :
-                          'text-blue-400'
+                    stat.color === 'green' ? 'text-green-400' :
+                      stat.color === 'purple' ? 'text-purple-400' :
+                        'text-blue-400'
                     }`}>
                     {stat.value}
                   </div>
@@ -1339,8 +1339,8 @@ useEffect(() => {
               <div key={index} className="text-center">
                 <div className="text-3xl mb-2">{stat.icon}</div>
                 <div className={`text-2xl font-bold ${stat.color === 'blue' ? 'text-blue-400' :
-                    stat.color === 'orange' ? 'text-orange-400' :
-                      stat.color === 'purple' ? 'text-purple-400' : 'text-green-400'
+                  stat.color === 'orange' ? 'text-orange-400' :
+                    stat.color === 'purple' ? 'text-purple-400' : 'text-green-400'
                   }`}>
                   {stat.value}
                 </div>
@@ -1563,11 +1563,11 @@ useEffect(() => {
                     </div>
                     <div className="space-y-3">
                       {selectedProject.features.map((feature: string, index: number) => (
-  <div key={index} className="flex items-start gap-3">
-    <div className="w-2 h-2 rounded-full bg-green-500 mt-2 flex-shrink-0"></div>
-    <span className="text-gray-300 text-sm">{feature}</span>
-  </div>
-))}
+                        <div key={index} className="flex items-start gap-3">
+                          <div className="w-2 h-2 rounded-full bg-green-500 mt-2 flex-shrink-0"></div>
+                          <span className="text-gray-300 text-sm">{feature}</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
 
@@ -1581,13 +1581,13 @@ useEffect(() => {
                     </div>
                     <div className="flex flex-wrap gap-3">
                       {selectedProject.tech.map((tech: string, index: number) => (
-  <span
-    key={index}
-    className="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300 border border-white/10 hover:border-blue-500/50 transition-colors duration-300"
-  >
-    {tech}
-  </span>
-))}
+                        <span
+                          key={index}
+                          className="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300 border border-white/10 hover:border-blue-500/50 transition-colors duration-300"
+                        >
+                          {tech}
+                        </span>
+                      ))}
                     </div>
                   </div>
 
@@ -1937,8 +1937,8 @@ useEffect(() => {
                     type="submit"
                     disabled={formStatus === 'sending'}
                     className={`w-full py-4 rounded-xl font-bold transition-all duration-300 group relative overflow-hidden ${formStatus === 'sending'
-                        ? 'bg-gray-700 cursor-not-allowed'
-                        : 'bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:shadow-2xl hover:shadow-purple-500/50 hover:scale-[1.02]'
+                      ? 'bg-gray-700 cursor-not-allowed'
+                      : 'bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:shadow-2xl hover:shadow-purple-500/50 hover:scale-[1.02]'
                       }`}
                   >
                     {formStatus === 'sending' ? (
