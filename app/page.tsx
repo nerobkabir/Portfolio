@@ -8,6 +8,7 @@ import Skills from "./components/Skills";
 import CPStatus from "./components/CPStatus";
 import Projects from "./components/Projects";
 import Contact from "./components/Contact";
+import LoadingScreen from "./components/LoadingScreen";
 
 // ─── Footer nav / project data (kept minimal here) ───────────────────────────
 const navItems = [
@@ -88,71 +89,10 @@ function Footer() {
   return (
     <footer className="relative overflow-hidden">
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-10"></div>
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500 via-purple-500 via-pink-500 to-transparent"></div>
 
-      <div className="relative py-12 md:py-16 px-4">
+      <div className="relative py-10 md:py-10 px-4">
         <div className="max-w-6xl mx-auto">
-          {/* Main row */}
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-10 mb-12">
-            {/* Brand */}
-            <div className="text-center lg:text-left">
-              <div className="text-3xl md:text-4xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-4">
-                {"<KH/>"}
-              </div>
-              <p className="text-gray-400 text-lg max-w-md">
-                Building digital experiences with code, creativity & coffee
-              </p>
-              <div className="flex items-center gap-3 mt-4 justify-center lg:justify-start">
-                <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
-                <span className="text-green-400 text-sm">Available for projects</span>
-              </div>
-            </div>
-
-            {/* Nav columns */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
-              <div>
-                <h4 className="text-white font-bold mb-4 text-sm uppercase tracking-wider">Navigation</h4>
-                <ul className="space-y-3">
-                  {navItems.map((item) => (
-                    <li key={item.name}>
-                      <button
-                        onClick={() => scrollToSection(item.href)}
-                        className="text-gray-400 hover:text-white transition-colors duration-300 text-sm flex items-center gap-2 group"
-                      >
-                        <span className="w-1 h-1 rounded-full bg-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-                        {item.name}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="text-white font-bold mb-4 text-sm uppercase tracking-wider">Connect</h4>
-                <ul className="space-y-3">
-                  <li><a href="https://github.com/nerobkabir" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors duration-300 text-sm flex items-center gap-2"><Github className="w-4 h-4" />GitHub</a></li>
-                  <li><a href="https://www.linkedin.com/in/kabir-hossain123" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors duration-300 text-sm flex items-center gap-2"><Linkedin className="w-4 h-4" />LinkedIn</a></li>
-                  <li><a href="mailto:nerob2308@gmail.com" className="text-gray-400 hover:text-white transition-colors duration-300 text-sm flex items-center gap-2"><Mail className="w-4 h-4" />Email</a></li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="text-white font-bold mb-4 text-sm uppercase tracking-wider">Projects</h4>
-                <ul className="space-y-3">
-                  {["LocalChefBazaar", "Artify", "NexChat", "GreenGadgets Hub", "Skillswap", "CareNext"].map((name) => (
-                    <li key={name}>
-                      <button
-                        onClick={() => scrollToSection("#projects")}
-                        className="text-gray-400 hover:text-blue-400 transition-colors duration-300 text-sm text-left"
-                      >
-                        {name}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
+          
 
           {/* Bottom row */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-8 pt-10 border-t border-white/10">
@@ -200,8 +140,21 @@ function Footer() {
 
 // ─── Root Page ────────────────────────────────────────────────────────────────
 export default function Page() {
+  const [isLoaded, setIsLoaded] = useState(false);
+
   return (
-    <div className="min-h-screen bg-black text-white overflow-x-hidden relative">
+    <>
+      {/* Loading screen — unmounts itself after fade-out completes */}
+      {!isLoaded && <LoadingScreen onComplete={() => setIsLoaded(true)} />}
+
+      {/* Main site — rendered in background, becomes visible after load */}
+      <div
+        className="min-h-screen bg-black text-white overflow-x-hidden relative"
+        style={{
+          opacity:    isLoaded ? 1 : 0,
+          transition: "opacity 0.5s ease",
+        }}
+      >
       <AnimatedBackground />
       <Navbar />
       <main>
@@ -245,6 +198,7 @@ export default function Page() {
         ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #3b82f6, #8b5cf6); border-radius: 5px; }
         ::-webkit-scrollbar-thumb:hover { background: linear-gradient(to bottom, #2563eb, #7c3aed); }
       `}</style>
-    </div>
+      </div>
+    </>
   );
 }

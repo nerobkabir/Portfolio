@@ -1,6 +1,5 @@
 "use client";
-import React, { useState } from "react";
-import { Code, Sparkles, ArrowUpRight, ChevronRight } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
 import { scrollToSection } from "../utils/scrollTo";
 
 const navItems = [
@@ -14,129 +13,373 @@ const navItems = [
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [activeItem, setActiveItem] = useState("Home");
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const navRef = useRef<HTMLDivElement>(null);
 
-  const handleNav = (href: string) => {
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (navRef.current) {
+        const rect = navRef.current.getBoundingClientRect();
+        setMousePos({
+          x: ((e.clientX - rect.left) / rect.width) * 100,
+          y: ((e.clientY - rect.top) / rect.height) * 100,
+        });
+      }
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  const handleNav = (href: string, name: string) => {
     setIsMenuOpen(false);
+    setActiveItem(name);
     scrollToSection(href);
   };
 
   return (
-    <nav className="fixed top-3 left-0 right-0 z-50 px-4 md:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="relative group">
-          {/* Animated Glow Background */}
-          <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-2xl opacity-20 group-hover:opacity-40 blur-xl transition-all duration-500 animate-pulse"></div>
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap');
 
-          {/* Main Navbar Container */}
-          <div className="relative bg-black/40 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px] opacity-30"></div>
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+        .nav-font { font-family: 'Syne', sans-serif; }
+        .mono-font { font-family: 'DM Mono', monospace; }
 
-            <div className="relative flex items-center justify-between px-4 md:px-6 py-3 md:py-4">
-              {/* Logo */}
-              <div className="relative group/logo cursor-pointer">
-                <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-xl opacity-0 group-hover/logo:opacity-30 blur-lg transition-all duration-500"></div>
-                <div className="relative flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-xl border border-white/10 group-hover/logo:border-white/30 transition-all duration-300">
-                  <div className="relative">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center group-hover/logo:scale-110 group-hover/logo:rotate-12 transition-all duration-300">
-                      <Code className="w-5 h-5 text-white" />
-                    </div>
-                  </div>
-                  <div className="hidden sm:block">
-                    <div className="text-xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent tracking-tight">
-                      KABIR
-                    </div>
-                    <div className="text-[10px] text-gray-400 tracking-widest -mt-1">DEVELOPER</div>
+        @keyframes slideDown {
+          from { opacity: 0; transform: translateY(-8px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeSlideIn {
+          from { opacity: 0; transform: translateX(-12px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes shimmer {
+          0% { background-position: -200% center; }
+          100% { background-position: 200% center; }
+        }
+        @keyframes borderPulse {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 0.8; }
+        }
+        @keyframes dotBlink {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.4; transform: scale(0.6); }
+        }
+
+        .nav-animate { animation: slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .mobile-item { animation: fadeSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+
+        .logo-text {
+          background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 40%, #e2e8f0 60%, #cbd5e1 100%);
+          background-size: 200% auto;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          animation: shimmer 4s linear infinite;
+        }
+
+        .nav-btn::after {
+          content: '';
+          position: absolute;
+          bottom: -1px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 0;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+          transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .nav-btn:hover::after,
+        .nav-btn.active::after {
+          width: 80%;
+        }
+
+        .cta-btn {
+          position: relative;
+          overflow: hidden;
+        }
+        .cta-btn::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+        .cta-btn:hover::before {
+          opacity: 1;
+        }
+
+        .spotlight {
+          background: radial-gradient(
+            circle at var(--mx) var(--my),
+            rgba(255,255,255,0.04) 0%,
+            transparent 60%
+          );
+        }
+
+        .mobile-menu-enter {
+          animation: slideDown 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .border-anim {
+          animation: borderPulse 3s ease-in-out infinite;
+        }
+
+        .status-dot {
+          animation: dotBlink 2s ease-in-out infinite;
+        }
+      `}</style>
+
+      <nav className="nav-font fixed top-0 left-0 right-0 z-50 px-0 pt-4 pb-2">
+        <div className="w-full px-4 md:px-8">
+          {/* Main Bar */}
+          <div
+            ref={navRef}
+            className="nav-animate relative"
+            style={{ "--mx": `${mousePos.x}%`, "--my": `${mousePos.y}%` } as React.CSSProperties}
+          >
+            {/* Border glow */}
+            <div
+              className="absolute inset-0 rounded-2xl border-anim"
+              style={{
+                background: "linear-gradient(135deg, rgba(148,163,184,0.15), rgba(71,85,105,0.08), rgba(148,163,184,0.12))",
+                borderRadius: "16px",
+                padding: "1px",
+              }}
+            >
+              <div className="w-full h-full rounded-2xl" style={{ background: "transparent" }} />
+            </div>
+
+            <div
+              className="spotlight relative flex items-center justify-between px-6 py-3.5 rounded-2xl"
+              style={{
+                background: scrolled
+                  ? "rgba(5, 8, 15, 0.92)"
+                  : "rgba(5, 8, 15, 0.75)",
+                backdropFilter: "blur(20px) saturate(180%)",
+                WebkitBackdropFilter: "blur(20px) saturate(180%)",
+                border: "1px solid rgba(148, 163, 184, 0.1)",
+                boxShadow: scrolled
+                  ? "0 8px 32px rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.05) inset"
+                  : "0 4px 20px rgba(0,0,0,0.4)",
+                transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+              }}
+            >
+              {/* ── Logo ── */}
+              <button
+                onClick={() => handleNav("#home", "Home")}
+                className="flex items-center gap-3 group"
+              >
+                <div
+                  className="relative w-9 h-9 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform duration-300"
+                  style={{
+                    background: "linear-gradient(135deg, #1e293b, #0f172a)",
+                    border: "1px solid rgba(148,163,184,0.2)",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.5)",
+                  }}
+                >
+                  <span
+                    className="text-base font-black"
+                    style={{
+                      background: "linear-gradient(135deg, #e2e8f0, #94a3b8)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                    }}
+                  >
+                    K
+                  </span>
+                  <span
+                    className="status-dot absolute -top-1 -right-1 w-2 h-2 rounded-full"
+                    style={{ background: "#22d3ee", boxShadow: "0 0 6px #22d3ee" }}
+                  />
+                </div>
+
+                <div className="hidden sm:block">
+                  <span className="logo-text text-lg font-bold tracking-tight">KABIR</span>
+                  <div
+                    className="mono-font text-[9px] tracking-[0.2em] mt-[-3px]"
+                    style={{ color: "rgba(100,116,139,0.8)" }}
+                  >
+                    DEVELOPER
                   </div>
                 </div>
-              </div>
+              </button>
 
-              {/* Desktop Nav */}
-              <div className="hidden lg:flex items-center gap-2">
+              {/* ── Desktop Nav ── */}
+              <div className="hidden lg:flex items-center gap-1">
                 {navItems.map((item) => (
                   <button
                     key={item.name}
-                    onClick={() => handleNav(item.href)}
-                    className="relative group/nav px-5 py-2.5 overflow-hidden"
+                    onClick={() => handleNav(item.href, item.name)}
+                    className={`nav-btn relative px-4 py-2 text-sm font-semibold tracking-wide transition-all duration-300 rounded-lg ${
+                      activeItem === item.name
+                        ? "active text-slate-100"
+                        : "text-slate-400 hover:text-slate-200"
+                    }`}
+                    style={{
+                      background:
+                        activeItem === item.name
+                          ? "rgba(148,163,184,0.08)"
+                          : "transparent",
+                    }}
                   >
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 to-purple-500/0 group-hover/nav:from-blue-500/10 group-hover/nav:to-purple-500/10 rounded-lg transition-all duration-300"></div>
-                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 group-hover/nav:w-3/4 transition-all duration-300 rounded-full"></div>
-                    <span className="relative text-sm font-medium text-gray-300 group-hover/nav:text-white transition-colors duration-300 flex items-center gap-2">
-                      <span className="w-1 h-1 rounded-full bg-blue-400 opacity-0 group-hover/nav:opacity-100 transition-opacity duration-300"></span>
-                      {item.name}
-                    </span>
+                    {item.name}
                   </button>
                 ))}
+              </div>
 
+              {/* ── CTA ── */}
+              <div className="hidden lg:flex items-center gap-3">
+                <div
+                  className="w-px h-6"
+                  style={{ background: "rgba(148,163,184,0.15)" }}
+                />
                 <button
-                  onClick={() => handleNav("#contact")}
-                  className="relative group/cta ml-3 px-6 py-2.5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-lg font-semibold text-sm overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-purple-500/50"
+                  onClick={() => handleNav("#contact", "Contact")}
+                  className="cta-btn flex items-center gap-2 px-5 py-2.5 text-sm font-bold tracking-wide rounded-xl transition-all duration-300 hover:scale-105 active:scale-95"
+                  style={{
+                    background: "linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%)",
+                    color: "#0f172a",
+                    boxShadow: "0 4px 16px rgba(148,163,184,0.25), 0 1px 0 rgba(255,255,255,0.3) inset",
+                  }}
                 >
-                  <span className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 translate-y-full group-hover/cta:translate-y-0 transition-transform duration-300"></span>
-                  <span className="relative flex items-center gap-2 text-white">
-                    <Sparkles size={16} />
-                    <span>Let's Talk</span>
-                    <ArrowUpRight size={16} className="group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5 transition-transform duration-300" />
-                  </span>
+                  <span>Hire Me</span>
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path d="M2.5 11.5L11.5 2.5M11.5 2.5H5.5M11.5 2.5V8.5" stroke="#0f172a" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
                 </button>
               </div>
 
-              {/* Mobile Menu Button */}
+              {/* ── Mobile Hamburger ── */}
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="lg:hidden relative p-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 hover:border-white/20 transition-all duration-300"
+                className="lg:hidden flex flex-col justify-center items-center w-9 h-9 gap-1.5 rounded-lg transition-all duration-300"
+                style={{
+                  background: isMenuOpen ? "rgba(148,163,184,0.12)" : "rgba(148,163,184,0.06)",
+                  border: "1px solid rgba(148,163,184,0.12)",
+                }}
+                aria-label="Menu"
               >
-                <div className="w-6 h-5 flex flex-col justify-between">
-                  <span className={`h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full transition-all duration-300 ${isMenuOpen ? "rotate-45 translate-y-2" : "w-full"}`}></span>
-                  <span className={`h-0.5 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full transition-all duration-300 ${isMenuOpen ? "opacity-0 scale-0" : "w-4 ml-auto"}`}></span>
-                  <span className={`h-0.5 bg-gradient-to-r from-pink-400 to-blue-400 rounded-full transition-all duration-300 ${isMenuOpen ? "-rotate-45 -translate-y-2" : "w-5 ml-auto"}`}></span>
-                </div>
+                <span
+                  className="block h-px w-5 rounded-full transition-all duration-300 origin-center"
+                  style={{
+                    background: "rgba(226,232,240,0.8)",
+                    transform: isMenuOpen ? "translateY(4px) rotate(45deg)" : "none",
+                  }}
+                />
+                <span
+                  className="block h-px rounded-full transition-all duration-300"
+                  style={{
+                    background: "rgba(148,163,184,0.6)",
+                    width: isMenuOpen ? "0" : "14px",
+                    opacity: isMenuOpen ? 0 : 1,
+                  }}
+                />
+                <span
+                  className="block h-px w-5 rounded-full transition-all duration-300 origin-center"
+                  style={{
+                    background: "rgba(226,232,240,0.8)",
+                    transform: isMenuOpen ? "translateY(-4px) rotate(-45deg)" : "none",
+                  }}
+                />
               </button>
             </div>
           </div>
-        </div>
 
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="lg:hidden mt-4 animate-slideDown">
-            <div className="relative bg-black/40 backdrop-blur-xl border border-white/20 rounded-2xl p-4 shadow-2xl overflow-hidden">
-              <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px] opacity-30"></div>
-              <div className="relative space-y-2">
-                {navItems.map((item, index) => (
+          {/* ── Mobile Menu ── */}
+          {isMenuOpen && (
+            <div
+              className="lg:hidden mobile-menu-enter mt-2 rounded-2xl overflow-hidden"
+              style={{
+                background: "rgba(5, 8, 15, 0.95)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                border: "1px solid rgba(148,163,184,0.12)",
+                boxShadow: "0 16px 40px rgba(0,0,0,0.7)",
+              }}
+            >
+              <div className="p-3 space-y-1">
+                {navItems.map((item, i) => (
                   <button
                     key={item.name}
-                    onClick={() => handleNav(item.href)}
-                    className="w-full group relative overflow-hidden animate-fadeIn"
-                    style={{ animationDelay: `${index * 0.05}s` }}
+                    onClick={() => handleNav(item.href, item.name)}
+                    className="mobile-item w-full flex items-center justify-between px-4 py-3.5 rounded-xl transition-all duration-200 group"
+                    style={{
+                      animationDelay: `${i * 0.04}s`,
+                      background:
+                        activeItem === item.name
+                          ? "rgba(148,163,184,0.1)"
+                          : "transparent",
+                    }}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.background = "rgba(148,163,184,0.08)")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.background =
+                        activeItem === item.name
+                          ? "rgba(148,163,184,0.1)"
+                          : "transparent")
+                    }
                   >
-                    <div className="relative px-6 py-4 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 hover:border-white/20 transition-all duration-300">
-                      <div className="flex items-center justify-between">
-                        <span className="flex items-center gap-3 text-gray-300 group-hover:text-white font-medium transition-colors duration-300">
-                          <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-blue-400 to-purple-400"></span>
-                          {item.name}
-                        </span>
-                        <ChevronRight className="w-5 h-5 text-gray-500 group-hover:text-blue-400 group-hover:translate-x-1 transition-all duration-300" />
-                      </div>
-                    </div>
+                    <span
+                      className="text-sm font-semibold tracking-wide"
+                      style={{
+                        color:
+                          activeItem === item.name
+                            ? "rgba(226,232,240,0.95)"
+                            : "rgba(148,163,184,0.7)",
+                      }}
+                    >
+                      {item.name}
+                    </span>
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 14 14"
+                      fill="none"
+                      style={{ color: "rgba(100,116,139,0.4)" }}
+                    >
+                      <path
+                        d="M5 3L9 7L5 11"
+                        stroke="currentColor"
+                        strokeWidth="1.2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
                   </button>
                 ))}
-                <button
-                  onClick={() => handleNav("#contact")}
-                  className="w-full mt-4"
-                >
-                  <div className="relative px-6 py-4 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-xl text-white font-semibold transition-all duration-300 hover:scale-[1.02]">
-                    <div className="flex items-center justify-center gap-2">
-                      <Sparkles size={18} />
-                      <span>Get In Touch</span>
-                      <ArrowUpRight size={18} />
-                    </div>
-                  </div>
-                </button>
+
+                <div className="pt-2 pb-1 px-1">
+                  <button
+                    onClick={() => handleNav("#contact", "Contact")}
+                    className="w-full flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl text-sm font-bold tracking-wide transition-all duration-300 active:scale-95"
+                    style={{
+                      background: "linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%)",
+                      color: "#0f172a",
+                      boxShadow: "0 4px 16px rgba(148,163,184,0.2)",
+                    }}
+                  >
+                    <span>Get In Touch</span>
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                      <path d="M2.5 11.5L11.5 2.5M11.5 2.5H5.5M11.5 2.5V8.5" stroke="#0f172a" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        )}
-      </div>
-    </nav>
+          )}
+        </div>
+      </nav>
+    </>
   );
 }
