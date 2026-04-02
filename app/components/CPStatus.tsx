@@ -1,15 +1,16 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 
+// Platform data with static colors (to avoid Tailwind dynamic class issues)
 const cpProfiles = [
   {
     label: "CF",
     platform: "Codeforces",
     handle: "@kabir_hossain",
     link: "https://codeforces.com/profile/kabir_hossain",
-    color: "blue",
+    color: "#3b82f6", // blue-500
     stats: [
-      { title: "Current Rating", value: "1074", sub: "Max: 1074 (Newbie)", barWidth: "28%" },
+      { title: "Current Rating", value: "1074", sub: "Max: 1074 (Newbie)", barWidth: 28 },
       { title: "Problems Solved", value: "179", sub: "132 solved last year" },
     ],
     footer: "Registered: 15 months ago",
@@ -19,9 +20,9 @@ const cpProfiles = [
     platform: "LeetCode",
     handle: "@kabirhossain",
     link: "https://leetcode.com/u/kabirhossain/",
-    color: "yellow",
+    color: "#eab308", // yellow-500
     stats: [
-      { title: "Problems Solved", value: "36/801", barWidth: "4.5%" },
+      { title: "Problems Solved", value: "36/801", barWidth: 4.5 },
       { title: "Recent Activity", value: "38", sub: "Submissions in past year" },
     ],
     footer: "0 problems this month",
@@ -31,9 +32,9 @@ const cpProfiles = [
     platform: "CodeChef",
     handle: "@happy_rein_95",
     link: "https://www.codechef.com/users/happy_resin_95",
-    color: "red",
+    color: "#ef4444", // red-500
     stats: [
-      { title: "Current Rating", value: "1064", sub: "Highest: 1064 (Div 4)", barWidth: "27%" },
+      { title: "Current Rating", value: "1064", sub: "Highest: 1064 (Div 4)", barWidth: 27 },
       { title: "Global Rank", value: "#119,244", sub: "Country Rank: #3,174" },
     ],
     footer: "From Bangladesh",
@@ -41,114 +42,263 @@ const cpProfiles = [
 ];
 
 const totalStats = [
-  { value: "215+", label: "Total Problems", icon: "🧠", color: "text-blue-400" },
-  { value: "8", label: "Max Streak", icon: "🔥", color: "text-orange-400" },
-  { value: "15+", label: "Contests", icon: "🏆", color: "text-purple-400" },
-  { value: "3,174", label: "Country Rank", icon: "🇧🇩", color: "text-green-400" },
+  { value: 215, label: "Total Problems", icon: "🧠", color: "#60a5fa" },
+  { value: 8, label: "Max Streak", icon: "🔥", color: "#f97316" },
+  { value: 15, label: "Contests", icon: "🏆", color: "#c084fc" },
+  { value: 3174, label: "Country Rank", icon: "🇧🇩", color: "#4ade80" },
 ];
 
-export default function CPStatus() {
-  return (
-    <section id="cp-stats" className="py-20 md:py-24 px-4">
-      <div className="max-w-6xl mx-auto">
+// Helper: Count‑up animation hook
+function useCountUp(end: number, duration = 1000, startOnMount = true) {
+  const [count, setCount] = useState(0);
+  const countRef = useRef<number>(0);
+  const frameRef = useRef<number | null>(null);
 
+  useEffect(() => {
+    if (!startOnMount) return;
+    let startTime: number | null = null;
+    const startValue = 0;
+    const endValue = end;
+
+    const step = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const current = startValue + (endValue - startValue) * progress;
+      setCount(Math.floor(current));
+      if (progress < 1) {
+        frameRef.current = requestAnimationFrame(step);
+      }
+    };
+
+    frameRef.current = requestAnimationFrame(step);
+    return () => {
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+    };
+  }, [end, duration, startOnMount]);
+
+  return count;
+}
+
+export default function CPStatus() {
+  const [visible, setVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Trigger count‑up when section enters viewport
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setVisible(true);
+      },
+      { threshold: 0.2 }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // Individual stat values with count‑up
+  const counts = {
+    totalProblems: useCountUp(totalStats[0].value, 1500, visible),
+    maxStreak: useCountUp(totalStats[1].value, 1000, visible),
+    contests: useCountUp(totalStats[2].value, 1200, visible),
+    countryRank: useCountUp(totalStats[3].value, 1400, visible),
+  };
+
+  return (
+    <section
+      id="cp-stats"
+      ref={sectionRef}
+      className="relative py-10 md:py-14 px-4 overflow-hidden"
+    >
+      {/* Background decoration */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-purple-500/5 rounded-full blur-3xl" />
+      </div>
+
+      <div className="max-w-6xl mx-auto relative z-10">
         {/* Header */}
         <div className="text-center mb-16">
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-            <div className="w-2 h-2 rounded-full bg-purple-500"></div>
-            <div className="w-2 h-2 rounded-full bg-pink-500"></div>
-          </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
-              Coding Profiles
+          <div className="inline-flex items-center gap-2 bg-white/5 backdrop-blur-sm rounded-full px-4 py-1.5 mb-6">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-40" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-400" />
             </span>
+            <span className="text-xs font-mono text-blue-300/80 tracking-wider">
+              COMPETITIVE PROGRAMMING
+            </span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            Coding Profiles
           </h2>
-          <p className="text-gray-400 max-w-md mx-auto">
-            Connect with me on competitive programming platforms
+          <p className="text-gray-400 max-w-xl mx-auto text-sm leading-relaxed">
+            My journey across platforms — stats, rankings, and progress.
           </p>
         </div>
 
         {/* Platform Cards */}
-        <div className="grid md:grid-cols-3 gap-6">
-          {cpProfiles.map((profile) => (
+        <div className="grid md:grid-cols-3 gap-8 mb-20">
+          {cpProfiles.map((profile, idx) => (
             <a
               key={profile.platform}
               href={profile.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="group block"
+              className="group block transform transition-all duration-500 hover:-translate-y-2"
             >
-              <div className={`relative bg-gradient-to-br from-${profile.color}-900/10 to-${profile.color}-900/5 rounded-xl p-6 border border-${profile.color}-500/20 hover:border-${profile.color}-400 transition-all duration-300 h-full`}>
-                {/* Header */}
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br from-${profile.color}-500/20 to-${profile.color}-600/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
-                      <span className="text-xl font-bold">{profile.label}</span>
+              <div
+                className="relative h-full rounded-2xl overflow-hidden backdrop-blur-sm bg-white/5 border border-white/10 hover:border-white/20 transition-all duration-300 shadow-lg hover:shadow-2xl"
+                style={{
+                  background: `linear-gradient(135deg, ${profile.color}08, rgba(255,255,255,0.02))`,
+                }}
+              >
+                {/* Glow effect on hover */}
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  style={{
+                    background: `radial-gradient(circle at 30% 20%, ${profile.color}20, transparent 70%)`,
+                  }}
+                />
+
+                <div className="p-6 relative">
+                  {/* Header */}
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-4">
+                      <div
+                        className="w-12 h-12 rounded-xl flex items-center justify-center text-xl font-bold transition-all duration-300 group-hover:scale-110"
+                        style={{
+                          background: `linear-gradient(135deg, ${profile.color}30, ${profile.color}10)`,
+                          color: profile.color,
+                        }}
+                      >
+                        {profile.label}
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-white tracking-tight">
+                          {profile.platform}
+                        </h3>
+                        <div
+                          className="text-xs font-mono"
+                          style={{ color: `${profile.color}cc` }}
+                        >
+                          {profile.handle}
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-white">{profile.platform}</h3>
-                      <div className={`text-sm text-${profile.color}-400`}>{profile.handle}</div>
+                    <div
+                      className="text-white/20 group-hover:text-white/40 transition-all duration-300 group-hover:translate-x-1"
+                    >
+                      →
                     </div>
                   </div>
-                  <div className={`text-${profile.color}-400 group-hover:translate-x-1 transition-transform duration-300`}>→</div>
-                </div>
 
-                {/* Stats */}
-                <div className="space-y-5">
-                  {profile.stats.map((stat, i) => (
-                    <div key={i}>
-                      <div className="flex justify-between items-center mb-2">
-                        <div className="text-gray-400 text-sm">{stat.title}</div>
-                        <div className={`text-${profile.color}-400 font-bold text-lg`}>{stat.value}</div>
+                  {/* Stats */}
+                  <div className="space-y-5">
+                    {profile.stats.map((stat, i) => (
+                      <div key={i}>
+                        <div className="flex justify-between items-center mb-1.5">
+                          <span className="text-xs text-gray-400 uppercase tracking-wide">
+                            {stat.title}
+                          </span>
+                          <span
+                            className="text-sm font-semibold"
+                            style={{ color: profile.color }}
+                          >
+                            {stat.value}
+                          </span>
+                        </div>
+                        {/* Progress bar (only if barWidth exists) */}
+                        {typeof stat.barWidth === "number" && (
+                          <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                            <div
+                              className="h-full rounded-full transition-all duration-1000 ease-out"
+                              style={{
+                                width: `${stat.barWidth}%`,
+                                background: `linear-gradient(90deg, ${profile.color}, ${profile.color}80)`,
+                              }}
+                            />
+                          </div>
+                        )}
+                        {stat.sub && (
+                          <p className="text-[11px] text-gray-500 mt-1.5">{stat.sub}</p>
+                        )}
+                        {/* Activity bars for LeetCode (example) */}
+                        {!stat.barWidth && (
+                          <div className="flex gap-0.5 mt-2">
+                            {[...Array(12)].map((_, j) => (
+                              <div
+                                key={j}
+                                className="flex-1 h-1.5 rounded-sm transition-all duration-300"
+                                style={{
+                                  background: `${profile.color}${Math.floor(30 + j * 5)}`,
+                                  opacity: 0.6 + j * 0.03,
+                                }}
+                              />
+                            ))}
+                          </div>
+                        )}
                       </div>
-                      {stat.barWidth && (
-                        <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
-                          <div className={`h-full bg-gradient-to-r from-${profile.color}-500 to-${profile.color}-400 rounded-full`} style={{ width: stat.barWidth }}></div>
-                        </div>
-                      )}
-                      {stat.sub && <div className="text-xs text-gray-500 mt-1">{stat.sub}</div>}
-                      {!stat.barWidth && (
-                        <div className="flex gap-1 mt-2">
-                          {[...Array(10)].map((_, j) => (
-                            <div key={j} className={`h-2 flex-1 rounded-sm bg-${profile.color}-500/30 group-hover:bg-${profile.color}-500/50 transition-all duration-300`} style={{ opacity: 0.3 + j * 0.07 }}></div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
 
-                {/* Footer */}
-                <div className="flex items-center justify-between mt-8 pt-4 border-t border-white/10">
-                  <div className="text-sm text-gray-400">{profile.footer}</div>
-                  <div className={`text-sm text-${profile.color}-400`}>Visit Profile</div>
+                  {/* Footer */}
+                  <div className="flex items-center justify-between mt-8 pt-4 border-t border-white/10">
+                    <span className="text-xs text-gray-500">{profile.footer}</span>
+                    <span
+                      className="text-xs font-medium transition-colors duration-200 group-hover:text-white"
+                      style={{ color: `${profile.color}cc` }}
+                    >
+                      Visit →
+                    </span>
+                  </div>
                 </div>
               </div>
             </a>
           ))}
         </div>
 
-        {/* Total Stats */}
-        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6">
-          {totalStats.map((stat, i) => (
-            <div key={i} className="text-center">
-              <div className="text-3xl mb-2">{stat.icon}</div>
-              <div className={`text-2xl font-bold ${stat.color}`}>{stat.value}</div>
-              <div className="text-sm text-gray-400">{stat.label}</div>
-            </div>
-          ))}
+        {/* Total Stats – with count‑up */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+          {totalStats.map((stat, i) => {
+            let value = 0;
+            switch (i) {
+              case 0: value = counts.totalProblems; break;
+              case 1: value = counts.maxStreak; break;
+              case 2: value = counts.contests; break;
+              case 3: value = counts.countryRank; break;
+              default: value = 0;
+            }
+            return (
+              <div
+                key={i}
+                className="text-center p-5 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 transition-all duration-300 hover:bg-white/10 hover:scale-105"
+              >
+                <div className="text-3xl mb-2">{stat.icon}</div>
+                <div
+                  className="text-2xl md:text-3xl font-bold"
+                  style={{ color: stat.color }}
+                >
+                  {stat.label === "Country Rank" ? `#${value.toLocaleString()}` : value.toLocaleString()}
+                  {stat.label === "Total Problems" && "+"}
+                </div>
+                <div className="text-sm text-gray-400 mt-1">{stat.label}</div>
+              </div>
+            );
+          })}
         </div>
 
-        {/* Note */}
-        <div className="mt-12 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full">
-            <span className="text-gray-400 text-sm">📍 Bangladesh | 🎓 Student</span>
+        {/* Additional Info */}
+        <div className="text-center">
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/5 backdrop-blur-sm rounded-full mb-6">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-40" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
+            </span>
+            <span className="text-xs text-gray-300">Active on all platforms</span>
           </div>
-          <p className="text-gray-500 text-sm mt-4 max-w-2xl mx-auto">
-            Actively participating in competitive programming for 15+ months.
-            Consistently solving problems across multiple platforms with 8 days max streak.
-            Focused on improving algorithmic thinking and problem-solving skills.
+          <p className="text-gray-500 text-sm max-w-2xl mx-auto leading-relaxed">
+            Actively participating in competitive programming for <strong className="text-white">15+ months</strong>. 
+            Consistently solving problems across multiple platforms with a <strong className="text-white">8‑day max streak</strong>. 
+            Focused on improving algorithmic thinking and problem‑solving skills.
           </p>
         </div>
       </div>

@@ -22,7 +22,7 @@ function Field({
     <div className="group">
       <div className="flex items-center justify-between mb-1.5">
         <label className="text-[10px] tracking-[0.18em] uppercase font-medium transition-colors duration-200"
-          style={{ color: focused ? "rgba(96,165,250,0.8)" : "rgba(255,255,255,0.2)" }}>
+          style={{ color: focused ? "rgba(96,165,250,0.8)" : "#FFFFFF" }}>
           {label}
         </label>
         {focused && (
@@ -34,7 +34,7 @@ function Field({
         onChange={e => onChange(e.target.value)}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
-        className="w-full bg-transparent text-sm text-white/65 placeholder:text-white/[0.12] outline-none pb-2.5"
+        className="w-full bg-transparent text-sm text-white outline-none pb-2.5"
         style={{
           borderBottom: `1px solid ${focused ? "rgba(96,165,250,0.45)" : "rgba(255,255,255,0.07)"}`,
           transition: "border-color 0.25s",
@@ -55,7 +55,7 @@ function TextareaField({
     <div>
       <div className="flex items-center justify-between mb-1.5">
         <label className="text-[10px] tracking-[0.18em] uppercase font-medium transition-colors duration-200"
-          style={{ color: focused ? "rgba(96,165,250,0.8)" : "rgba(255,255,255,0.2)" }}>
+          style={{ color: focused ? "rgba(96,165,250,0.8)" : "#FFFFFF" }}>
           {label}
         </label>
       </div>
@@ -64,7 +64,7 @@ function TextareaField({
         onChange={e => onChange(e.target.value)}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
-        className="w-full bg-transparent text-sm text-white/65 placeholder:text-white/[0.12] outline-none pb-2.5 resize-none"
+        className="w-full bg-transparent text-sm text-white outline-none pb-2.5 resize-none"
         style={{
           borderBottom: `1px solid ${focused ? "rgba(96,165,250,0.45)" : "rgba(255,255,255,0.07)"}`,
           transition: "border-color 0.25s",
@@ -85,7 +85,7 @@ function ContactRow({ icon: Icon, label, value, href }: {
       </div>
       <div className="flex-1 min-w-0">
         <p className="text-[9px] tracking-[0.2em] uppercase text-white/20 mb-0.5">{label}</p>
-        <p className="text-sm text-white/45 group-hover:text-white/65 transition-colors duration-200 truncate">{value}</p>
+        <p className="text-sm text-white transition-colors duration-200 truncate">{value}</p>
       </div>
       {href && (
         <ArrowUpRight className="w-3 h-3 text-white/0 group-hover:text-white/25 transition-all duration-200 flex-shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -119,7 +119,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="relative py-14 md:py-18 overflow-hidden">
+    <section id="contact" className="relative py-6 md:py-7 overflow-hidden">
 
       {/* ghost text */}
       <div className="absolute right-0 top-1/2 select-none pointer-events-none hidden xl:block"
@@ -151,12 +151,12 @@ export default function Contact() {
           <div className="space-y-10">
             <div>
               <h2 className="text-4xl sm:text-5xl font-bold leading-[1.05] tracking-tight">
-                <span className="text-white/80">Let's build</span><br />
+                <span className="text-white">Let's build</span><br />
                 <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                   together.
                 </span>
               </h2>
-              <p className="mt-4 text-white/28 text-sm leading-relaxed max-w-xs">
+              <p className="mt-4 text-white text-sm leading-relaxed max-w-xs">
                 Open for freelance, collabs & full-time roles.
                 Usually respond within a few hours.
               </p>
@@ -176,7 +176,7 @@ export default function Contact() {
                 { icon: Mail,     label: "Email",    href: "mailto:nerob2308@gmail.com" },
               ].map((s, i) => (
                 <a key={i} href={s.href} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs text-white/30 hover:text-white/55 transition-all duration-200"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs text-white transition-all duration-200"
                   style={{ border: "1px solid rgba(255,255,255,0.07)", background: "rgba(255,255,255,0.02)" }}>
                   <s.icon className="w-3 h-3" />{s.label}
                 </a>
@@ -188,7 +188,7 @@ export default function Contact() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-40" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
               </span>
-              <span className="text-xs text-white/20 tracking-[0.12em]">Available for new projects</span>
+              <span className="text-xs text-white tracking-[0.12em]">Available for new projects</span>
             </div>
           </div>
 
@@ -209,11 +209,11 @@ export default function Contact() {
                     style={{ background: "rgba(96,165,250,0.1)", border: "1px solid rgba(96,165,250,0.15)" }}>
                     <Mail className="w-3.5 h-3.5 text-blue-400/70" />
                   </div>
-                  <span className="text-sm text-white/35 font-medium">Send a message</span>
+                  <span className="text-sm text-white font-medium">Send a message</span>
                 </div>
 
                 {/* status indicator */}
-                <div className="flex items-center gap-1.5 text-[10px] tracking-[0.1em] text-white/20">
+                <div className="flex items-center gap-1.5 text-[10px] tracking-[0.1em] text-white">
                   <span className="w-1.5 h-1.5 rounded-full bg-green-400/60" />
                   secure
                 </div>

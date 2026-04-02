@@ -9,6 +9,7 @@ import CPStatus from "./components/CPStatus";
 import Projects from "./components/Projects";
 import Contact from "./components/Contact";
 import LoadingScreen from "./components/LoadingScreen";
+import CursorTrail from "./components/CursorTrail";
 
 // ─── Footer nav / project data (kept minimal here) ───────────────────────────
 const navItems = [
@@ -90,8 +91,9 @@ function Footer() {
     <footer className="relative overflow-hidden">
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-10"></div>
 
-      <div className="relative py-10 md:py-10 px-4">
+      <div className="relative py-12 md:py-16 px-4">
         <div className="max-w-6xl mx-auto">
+          {/* Main row */}
           
 
           {/* Bottom row */}
@@ -155,6 +157,7 @@ export default function Page() {
           transition: "opacity 0.5s ease",
         }}
       >
+      <CursorTrail />
       <AnimatedBackground />
       <Navbar />
       <main>
