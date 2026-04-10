@@ -10,6 +10,7 @@ import Projects from "./components/Projects";
 import Contact from "./components/Contact";
 import LoadingScreen from "./components/LoadingScreen";
 import CursorTrail from "./components/CursorTrail";
+import PortfolioChat from "./components/PortfolioChat";
 
 // ─── Footer nav / project data (kept minimal here) ───────────────────────────
 const navItems = [
@@ -169,6 +170,7 @@ export default function Page() {
         <Contact />
       </main>
       <Footer />
+      <PortfolioChat />
 
       {/* Global CSS Animations */}
       <style jsx global>{`
