@@ -11,14 +11,14 @@ const platforms = [
     link: "https://codeforces.com/profile/kabir_hossain",
     accent: "#3b82f6",
     accentDim: "rgba(59,130,246,0.12)",
-    badge: "Newbie",
-    badgeColor: "rgba(156,163,175,0.15)",
-    badgeText: "#9ca3af",
-    rating: 1074,
+    badge: "Pupil",                          // Newbie → Pupil
+    badgeColor: "rgba(74,222,128,0.12)",      // gray → green
+    badgeText: "#4ade80",                     // gray → green
+    rating: 1213,                             // 1074 → 1213
     maxRating: 3500,
-    solved: 179,
+    solved: 190,                              // 179 → 190
     contests: 10,
-    extra: "132 solved last year",
+    extra: "88 solved last year",             // 132 → 88
     logoChar: "CF",
   },
   {
@@ -58,7 +58,7 @@ const platforms = [
 ];
 
 const overallStats = [
-  { label: "Problems Solved",  value: 215, suffix: "+", icon: Code2,    color: "#60a5fa", tip: "Across all platforms"         },
+  { label: "Problems Solved",  value: 226, suffix: "+", icon: Code2,    color: "#60a5fa", tip: "Across all platforms"         },
   { label: "Contests Entered", value: 15,  suffix: "",  icon: Trophy,   color: "#c084fc", tip: "CF + LC + CC combined"         },
   { label: "Max Streak",       value: 8,   suffix: "d", icon: Flame,    color: "#fb923c", tip: "Consecutive days of activity"  },
   { label: "Country Rank",     value: 3174,suffix: "",  prefix: "#", icon: Globe2, color: "#4ade80", tip: "CodeChef Bangladesh rank" },
