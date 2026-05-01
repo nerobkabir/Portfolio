@@ -1,8 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import {
-  Github, Linkedin, Mail, Download, MapPin, Zap, MessageCircle, Trophy, ArrowUpRight,
-} from "lucide-react";
+import { Github, Linkedin, Mail, MapPin, Zap, MessageCircle, Trophy, ArrowUpRight } from "lucide-react";
 import { scrollToSection } from "../utils/scrollTo";
 
 const roles = [
@@ -41,14 +39,10 @@ export default function Hero() {
     return () => clearInterval(interval);
   }, [currentRole]);
 
-  const handleResumeDownload = () => {
-    const link = document.createElement("a");
-    link.href = "/MD. Kabir Hossain Resume.pdf";
-    link.download = "MD. Kabir Hossain Resume.pdf";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  // এই function টা replace করো
+const handleResumeView = () => {
+  window.open("/MD. Kabir Hossain Resume.pdf", "_blank");
+};
 
   return (
     <section id="home" className="min-h-screen flex items-center justify-center px-6 md:px-26 pt-35 relative">
@@ -90,11 +84,11 @@ export default function Hero() {
                 <Mail size={18} /> Get In Touch
               </button>
               <button
-                onClick={handleResumeDownload}
-                className="px-7 py-3 bg-white/5 border border-white/20 rounded-lg font-semibold flex items-center gap-2 hover:bg-white/10 transition"
-              >
-                <Download size={18} /> Download Resume
-              </button>
+  onClick={handleResumeView}
+  className="px-7 py-3 bg-white/5 border border-white/20 rounded-lg font-semibold flex items-center gap-2 hover:bg-white/10 transition"
+>
+  <ArrowUpRight size={18} /> View Resume
+</button>
             </div>
 
             {/* Social Links */}
