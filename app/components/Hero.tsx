@@ -41,7 +41,7 @@ export default function Hero() {
 
   // এই function টা replace করো
 const handleResumeView = () => {
-  window.open("/MD. Kabir Hossain Resume.pdf", "_blank");
+  window.open("/MD. Kabir Hossain Resume1.pdf", "_blank");
 };
 
   return (
