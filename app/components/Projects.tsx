@@ -36,6 +36,39 @@ type Project = {
 const ALL_PROJECTS: Project[] = [
   {
     id: 0, featured: true,
+    name: "WriteFlow AI",
+    tagline: "Agentic AI Content Workspace for Teams",
+    image: "https://writeflow-ai-chi.vercel.app/og-image.png",
+    images: [
+      "https://writeflow-ai-chi.vercel.app/og-image.png",
+      "https://writeflow-ai-chi.vercel.app/og-image.png",
+      "https://writeflow-ai-chi.vercel.app/og-image.png",
+      "https://writeflow-ai-chi.vercel.app/og-image.png",
+      "https://writeflow-ai-chi.vercel.app/og-image.png",
+      "https://writeflow-ai-chi.vercel.app/og-image.png",
+    ],
+    shortDesc: "Production-grade SaaS content workspace — 3 AI agents (Draft, Rewrite, Chat), role-based dashboards, streaming responses & full dark mode.",
+    tech: ["Next.js 14", "TypeScript", "Prisma", "Anthropic Claude API", "NextAuth.js", "Tailwind CSS", "TipTap", "Framer Motion"],
+    fullDesc: "WriteFlow AI is a multi-role SaaS platform for professional content teams. Agentic AI autonomously plans, generates, rewrites, and publishes blog posts, social captions, and email copy — with streaming word-by-word output and admin analytics.",
+    liveLink: "https://writeflow-ai-chi.vercel.app",
+    githubLink: "https://github.com/nerobkabir/writeflow-ai",
+    challenges: "3 agentic AI flows with streaming ReadableStream · role-based middleware for User & Admin · Prisma + Supabase schema design · real-time Recharts from DB aggregations",
+    improvements: "Team collaboration, AI image generation, multi-language support, Stripe billing, webhook integrations.",
+    features: [
+      "Content Draft Agent — blog, social & email from topic + tone",
+      "Rewrite & Tone Agent — formal, casual, shorten, expand, grammar fix",
+      "Chat Assistant — context-aware streaming chatbot with memory",
+      "Admin Review Summariser — 3-bullet summary + sentiment analysis",
+      "Role-based User & Admin dashboards with middleware protection",
+      "Streaming AI responses — word-by-word via ReadableStream",
+    ],
+    category: "AI-Powered",
+    year: "2025",
+    accent: "#a78bfa",
+    accentDim: "rgba(167,139,250,0.07)",
+  },
+  {
+    id: 1, featured: true,
     name: "DevHire",
     tagline: "AI-Powered Developer Hiring Platform",
     image: "https://i.ibb.co.com/V0XRyBTG/Screenshot-198.png",
@@ -61,7 +94,7 @@ const ALL_PROJECTS: Project[] = [
     accentDim: "rgba(167,139,250,0.07)",
   },
   {
-    id: 1,
+    id: 2,
     name: "LocalChefBazaar",
     tagline: "Marketplace for Home-Cooked Meals",
     image: "https://i.ibb.co.com/SwbFNfWz/Screenshot-201.png",
@@ -85,7 +118,7 @@ const ALL_PROJECTS: Project[] = [
     accentDim: "rgba(20,184,166,0.06)",
   },
   {
-  id: 2,
+  id: 3,
   name: "GreenGadgets Hub",
   tagline: "Eco-Friendly E-Commerce Platform",
   image: "https://i.ibb.co.com/27vKkDTD/Screenshot-207.png",
@@ -112,7 +145,7 @@ const ALL_PROJECTS: Project[] = [
 },
 
 {
-  id: 3,
+  id: 4,
   name: "NexChat",
   tagline: "Real-time Messaging Application",
   image: "https://i.ibb.co.com/spjwrPwV/Screenshot-214.png",
@@ -138,7 +171,7 @@ const ALL_PROJECTS: Project[] = [
   accentDim: "rgba(59,130,246,0.06)",
 },
   {
-    id: 4,
+    id: 5,
     name: "Artify",
     tagline: "Creative Artwork Showcase Platform",
     image: "https://i.ibb.co.com/Qv5S0Tfr/Screenshot-132.png",
@@ -162,7 +195,7 @@ const ALL_PROJECTS: Project[] = [
     accentDim: "rgba(245,158,11,0.06)",
   },
   {
-    id: 5,
+    id: 6,
     name: "Skillswap",
     tagline: "Skill Sharing & Learning Platform",
     image: "https://i.ibb.co.com/Y7Dw25hD/Screenshot-170.png",
@@ -186,7 +219,7 @@ const ALL_PROJECTS: Project[] = [
     accentDim: "rgba(236,72,153,0.06)",
   },
   {
-    id: 6,
+    id: 7,
     name: "CareNext",
     tagline: "Childcare & Elderly Care Booking",
     image: "https://i.ibb.co.com/jkDVZ4Yz/Screenshot-171.png",
@@ -210,7 +243,7 @@ const ALL_PROJECTS: Project[] = [
     accentDim: "rgba(6,182,212,0.06)",
   },
   {
-    id: 7,
+    id: 8,
     name: "Hero Apps",
     tagline: "Modern App Discovery Platform",
     image: "https://i.ibb.co.com/Y7XpZFPF/Screenshot-130.png",
@@ -234,7 +267,7 @@ const ALL_PROJECTS: Project[] = [
     accentDim: "rgba(249,115,22,0.06)",
   },
   {
-    id: 8,
+    id: 9,
     name: "Hintro Dashboard",
     tagline: "Frontend Internship — Mock Analytics Dashboard",
     image: "https://placehold.co/800x500/0a0f1e/6366f1?text=Hintro+Dashboard",
@@ -267,7 +300,7 @@ const ALL_PROJECTS: Project[] = [
     accentDim: "rgba(99,102,241,0.06)",
   },
   {
-    id: 9,
+    id: 10,
     name: "WeeroHub",
     tagline: "Full-Stack Product Management App",
     image: "https://placehold.co/800x500/0a0f1e/f43f5e?text=WeeroHub",
