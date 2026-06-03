@@ -41,7 +41,7 @@ const ALL_PROJECTS: Project[] = [
     image: "https://writeflow-ai-chi.vercel.app/og-image.png",
     images: [
       "https://ibb.co.com/hx3z7Qhx",
-      "https://writeflow-ai-chi.vercel.app/og-image.png",
+      "https://ibb.co.com/ZRYpD1XY",
       "https://writeflow-ai-chi.vercel.app/og-image.png",
       "https://writeflow-ai-chi.vercel.app/og-image.png",
       "https://writeflow-ai-chi.vercel.app/og-image.png",
