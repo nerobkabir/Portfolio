@@ -40,7 +40,7 @@ const ALL_PROJECTS: Project[] = [
     tagline: "Agentic AI Content Workspace for Teams",
     image: "https://writeflow-ai-chi.vercel.app/og-image.png",
     images: [
-      "https://writeflow-ai-chi.vercel.app/og-image.png",
+      "https://ibb.co.com/hx3z7Qhx",
       "https://writeflow-ai-chi.vercel.app/og-image.png",
       "https://writeflow-ai-chi.vercel.app/og-image.png",
       "https://writeflow-ai-chi.vercel.app/og-image.png",
