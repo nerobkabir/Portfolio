@@ -45,7 +45,7 @@ const ALL_PROJECTS: Project[] = [
       "https://ibb.co.com/fdyH1bf9",
       "https://ibb.co.com/vxhcWrNc",
       "https://ibb.co.com/vCdrTb7G",
-      "https://writeflow-ai-chi.vercel.app/og-image.png",
+      "https://ibb.co.com/yFX9b2QZ",
     ],
     shortDesc: "Production-grade SaaS content workspace — 3 AI agents (Draft, Rewrite, Chat), role-based dashboards, streaming responses & full dark mode.",
     tech: ["Next.js 14", "TypeScript", "Prisma", "Anthropic Claude API", "NextAuth.js", "Tailwind CSS", "TipTap", "Framer Motion"],
